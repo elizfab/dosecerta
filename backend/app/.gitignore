@@ -1,0 +1,21 @@
+.env
+.env.local
+.env.production
+
+backend
+*.exe
+*.test
+coverage.out
+coverage.html
+
+# arquivos temporários deixados pelo gofmt neste ambiente (não versionar)
+*.go.[0-9]*
+
+vendor/
+
+*.log
+
+.DS_Store
+Thumbs.db
+
+.vercel

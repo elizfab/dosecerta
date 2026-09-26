@@ -1,44 +1,20 @@
-# Frontend
+<h1 align="left">
+  <a href="https://elizabetesousafabri.com.br" target="_blank">
+    <img src="" width="45" />
+  </a>
+  <span>Dose Certa</span>
+</h1>
 
-Frontend do projeto Caderno Inteligente.
+### **Vercel frontend**
 
-## Stack
+- **Project ID:** prj_KTIatLmXSywgv9OmCnUak6vwweu5
+- **Github:** [https://github.com/elizfab/dosecerta](https://github.com/elizfab/dosecerta.git)
+- **dominio:** []()
 
-- Angular 21
-- SCSS
-- Vitest (testes unitários)
+### Informações deploy:
 
-## URLs
-
-- Produção: `https://caderno-frontend.pages.dev`
-- Local: `http://localhost:6003`
-
-## Variáveis de ambiente
-
-As configurações de ambiente estão em `src/environments/`:
-
-| Arquivo | Uso |
-| ------- | --- |
-| `environment.ts` | Padrão |
-| `environment.development.ts` | Desenvolvimento |
-| `environment.production.ts` | Produção (Cloudflare Pages) |
-
-## Comandos
-
-```bash
-npm install
-npm start
-npm run build
-npm run test
-```
-
-## Deploy
-
-O deploy é feito automaticamente pelo GitHub Actions para Cloudflare Pages.
-
-### Secrets necessários
-
-Configure no repositório em **Settings > Secrets and variables > Actions**:
-
-- `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_API_TOKEN`
+- [REPOSITÓRIO](https://github.com/elizfab/dosecerta/)
+- [DEPLOY](https://dose-certa-saude.vercel.app/)
+- TYPE TAG: [saude]()
+- [http://localhost:6012/](http://localhost:6012/)
+- [PORTA: 6012](http://localhost:6012/)
