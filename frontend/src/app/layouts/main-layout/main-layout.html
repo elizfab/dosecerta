@@ -1,0 +1,90 @@
+<div class="dc-shell">
+  <header class="dc-header">
+    <div class="dc-nav-container dc-container">
+      <a class="dc-logo" routerLink="/dashboard" aria-label="DoseCerta — início">
+        <img class="dc-logo__mark" src="/favicon.png" alt="" aria-hidden="true" />
+        <span class="dc-logo__text">DoseCerta <small>&amp; Saúde</small></span>
+      </a>
+
+      <!-- Navegação no topo: só a partir de tablet -->
+      <nav class="dc-topnav" aria-label="Navegação principal">
+        <ul>
+          @for (item of primaryNav; track item.path) {
+            <li>
+              <a [routerLink]="item.path" routerLinkActive="active" class="dc-nav-link">
+                {{ item.label }}
+              </a>
+            </li>
+          }
+          @for (item of secondaryNav; track item.path) {
+            <li>
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="active"
+                class="dc-nav-link dc-nav-link--muted"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <button
+        type="button"
+        class="dc-theme-toggle"
+        (click)="themeService.toggle()"
+        [attr.aria-label]="
+          themeService.theme() === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'
+        "
+        [attr.aria-pressed]="themeService.theme() === 'dark'"
+      >
+        <i
+          class="ti"
+          [class.ti-sun]="themeService.theme() === 'dark'"
+          [class.ti-moon]="themeService.theme() !== 'dark'"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="dc-main dc-container">
+    <div
+      class="dc-backend-status"
+      [class.online]="backendStatus() === 'online'"
+      [class.offline]="backendStatus() === 'offline'"
+    >
+      @switch (backendStatus()) {
+        @case ('checking') {
+          <span>Conectando ao backend…</span>
+        }
+        @case ('online') {
+          <span>● Backend conectado</span>
+        }
+        @case ('offline') {
+          <span>● Backend indisponível</span>
+        }
+      }
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-footer></app-footer>
+
+  <!-- Toasts globais de notificação (erros de API, confirmações) -->
+  <app-toast></app-toast>
+
+  <!-- Barra inferior de navegação: só no mobile -->
+  <nav class="dc-bottomnav" aria-label="Navegação">
+    @for (item of primaryNav; track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="active" class="dc-bottomnav__item">
+        <span class="dc-bottomnav__icon" aria-hidden="true"
+          ><i class="ti {{ item.icon }}"></i
+        ></span>
+        <span class="dc-bottomnav__label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+</div>

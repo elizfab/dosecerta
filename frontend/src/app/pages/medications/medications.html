@@ -1,0 +1,130 @@
+<h1 class="dc-page-title">Minhas medicações</h1>
+<p class="dc-subtitle">Seus remédios organizados por período do dia.</p>
+
+@if (error()) {
+  <p class="dc-error" role="alert">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <p class="med-loading">Carregando…</p>
+} @else if (periodGroups().length > 0) {
+  <section class="med-periods">
+    @for (group of periodGroups(); track group.key) {
+      <article [class]="'dc-period ' + group.className">
+        <header class="dc-period__head">
+          <span class="dc-period__icon" aria-hidden="true"><i class="ti {{ group.icon }}"></i></span>
+          {{ group.label }}
+          <span class="dc-period__count">{{ group.meds.length }}</span>
+        </header>
+        <div class="dc-period__body">
+          @for (med of group.meds; track med.id) {
+            <div class="dc-dose" [class.dc-dose--paused]="!med.active">
+              <div class="dc-dose__info">
+                <div class="dc-dose__name">
+                  {{ med.name }}
+                  @if (!med.active) { <span class="dc-status dc-status--warning">pausado</span> }
+                </div>
+                <div class="dc-dose__meta">
+                  {{ med.dosage }}@if (med.notes) { · {{ med.notes }} }
+                </div>
+              </div>
+              <span class="dc-dose__time">{{ med.schedule }}</span>
+              <div class="dc-dose__actions">
+                <button type="button" class="dc-iconbtn" (click)="togglePause(med)"
+                        [attr.aria-label]="(med.active ? 'Pausar ' : 'Reativar ') + med.name">
+                  <i class="ti" [class.ti-player-pause]="med.active" [class.ti-player-play]="!med.active" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="dc-iconbtn" (click)="edit(med)"
+                        [attr.aria-label]="'Editar ' + med.name">
+                  <i class="ti ti-pencil" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="dc-iconbtn dc-iconbtn--danger" (click)="remove(med)"
+                        [attr.aria-label]="'Excluir ' + med.name">
+                  <i class="ti ti-trash" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </article>
+    }
+  </section>
+} @else {
+  <section class="dc-card empty-state">
+    <span class="empty-state__emoji" aria-hidden="true"><i class="ti ti-pill"></i></span>
+    <h3>Nenhum medicamento ainda</h3>
+    <p class="metric-desc">Cadastre seu primeiro remédio para vê-lo organizado por período.</p>
+    <button type="button" class="dc-btn dc-btn--primary" (click)="openForm()">
+      <i class="ti ti-plus" aria-hidden="true"></i> Cadastrar medicação
+    </button>
+  </section>
+}
+
+<!-- Botão flutuante de novo medicamento -->
+<button type="button" class="dc-fab" (click)="openForm()" aria-label="Novo medicamento">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+</button>
+
+<!-- Bottom sheet de cadastro/edição -->
+@if (showForm()) {
+  <div class="dc-sheet-overlay" (click)="cancel()">
+    <div class="dc-sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+         [attr.aria-label]="editingId() ? 'Editar medicamento' : 'Novo medicamento'">
+      <div class="dc-sheet__grip" aria-hidden="true"></div>
+      <header class="dc-sheet__head">
+        <h3>{{ editingId() ? 'Editar medicamento' : 'Novo medicamento' }}</h3>
+        <button type="button" class="dc-iconbtn" (click)="cancel()" aria-label="Fechar">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="dc-form-group">
+        <label for="med-name">Nome do medicamento</label>
+        <input id="med-name" class="dc-input" type="text" [(ngModel)]="form.name"
+               placeholder="Omeprazol" autocomplete="off" />
+      </div>
+      <div class="dc-form-group">
+        <label for="med-dosage">Dose / posologia</label>
+        <input id="med-dosage" class="dc-input" type="text" [(ngModel)]="form.dosage"
+               placeholder="20 mg" autocomplete="off" />
+      </div>
+      <div class="dc-form-group">
+        <label for="med-schedule">Horário</label>
+        <input id="med-schedule" class="dc-input" type="time" [(ngModel)]="form.schedule" />
+        @if (formPeriod(); as p) {
+          <span class="form-period-hint">
+            <i class="ti {{ p.icon }}" aria-hidden="true"></i> {{ p.label }}
+          </span>
+        }
+      </div>
+      <div class="dc-form-group">
+        <label for="med-notes">Observações <span class="opt">(opcional)</span></label>
+        <input id="med-notes" class="dc-input" type="text" [(ngModel)]="form.notes"
+               placeholder="Em jejum" autocomplete="off" />
+      </div>
+
+      <div class="fields-grid">
+        <div class="dc-form-group">
+          <label for="med-stock">Estoque <span class="opt">(opcional)</span></label>
+          <input id="med-stock" class="dc-input" type="number" min="0" step="1"
+                 [(ngModel)]="form.stock" placeholder="Ex: 30" />
+        </div>
+        <div class="dc-form-group">
+          <label for="med-start">Início <span class="opt">(opcional)</span></label>
+          <input id="med-start" class="dc-input" type="date" [(ngModel)]="form.startDate" />
+        </div>
+        <div class="dc-form-group">
+          <label for="med-end">Fim <span class="opt">(opcional)</span></label>
+          <input id="med-end" class="dc-input" type="date" [(ngModel)]="form.endDate" />
+        </div>
+      </div>
+
+      <div class="dc-form-actions">
+        <button class="dc-btn dc-btn--outline" (click)="cancel()">Cancelar</button>
+        <button class="dc-btn dc-btn--primary" (click)="save()" [disabled]="saving()">
+          {{ saving() ? 'Salvando…' : 'Salvar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,21 @@
+// ============================================================================
+// CSS Reset - Browser normalization
+// ============================================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  // Base 17px (acessibilidade: público crônico / possível baixa visão).
+  font-size: 106.25%;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+}

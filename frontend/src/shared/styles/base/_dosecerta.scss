@@ -1,0 +1,989 @@
+// ============================================================================
+// DoseCerta — Design System (paleta pastel, mobile-first)
+// Padrão de botões/badges: fundo pastel suave + texto forte do mesmo tom
+// (alto contraste, acessível — AA). Medidas em rem e %; layout em grid/flex.
+// ============================================================================
+
+:root {
+  /* 🌸 Marca / ação primária — rosa acolhedor (direção "cuidado calmo") */
+  --dc-primary: #ff8899; // rosa
+  --dc-primary-strong: #b23a68; // texto/realce sobre pastel claro (contraste AA)
+  --dc-primary-soft: #fdeef3; // fundo de superfície/realce
+  --dc-primary-border: #f4c4d5;
+
+  --dc-secondary: #b6e3d2; // menta
+  --dc-secondary-strong: #2f8f7a;
+  --dc-secondary-soft: #e6f6ef;
+  --dc-secondary-border: #cdeee0;
+
+  --dc-accent: #cdbdf0; // lavanda
+  --dc-accent-strong: #6b4fb0;
+  --dc-accent-soft: #f1ecfb;
+
+  --dc-pink: #f6c6da; // rosa pastel
+  --dc-pink-strong: #b5487d;
+  --dc-pink-soft: #fdeef4;
+
+  --dc-danger: #f4b8b8; // coral suave
+  --dc-danger-strong: #c0392b;
+  --dc-danger-soft: #fceaea;
+
+  --dc-warning-soft: #fdeecf;
+  --dc-warning-strong: #a5771f;
+
+  /* 🚦 Status (uso SÓ para situação: tomado, pendente, atrasado, alterado) */
+  --dc-status-success: #2f7d4f;
+  --dc-status-success-soft: #e3f3e3;
+  --dc-status-warning: #b06a12;
+  --dc-status-warning-soft: #fdeecf;
+  --dc-status-danger: #c0392b;
+  --dc-status-danger-soft: #fceaea;
+  --dc-status-info: #355f8c;
+  --dc-status-info-soft: #e6eef7;
+
+  /* 🕑 Período do dia — organizador visual principal (do exemplo de referência) */
+  --dc-period-morning-soft: #ffe6ec; // Manhã — rosa/coral
+  --dc-period-morning-strong: #c0396b;
+  --dc-period-morning-border: #ffd0dc;
+  --dc-period-afternoon-soft: #ffeed6; // Tarde — pêssego/âmbar
+  --dc-period-afternoon-strong: #b06a12;
+  --dc-period-afternoon-border: #ffddb0;
+  --dc-period-evening-soft: #d9f2ec; // Noite — turquesa
+  --dc-period-evening-strong: #1f8a76;
+  --dc-period-evening-border: #b8e6da;
+  --dc-period-night-soft: #e6e8fb; // Madrugada — azul/lilás
+  --dc-period-night-strong: #5750c2;
+  --dc-period-night-border: #cfd2f4;
+  --dc-period-asneeded-soft: #e3f3e3; // Se necessário — verde suave
+  --dc-period-asneeded-strong: #2f7d4f;
+  --dc-period-asneeded-border: #c6e6c6;
+
+  /* 🌇 Superfícies e texto */
+  --dc-bg: #f6f9fc;
+  --dc-bg-gradient: linear-gradient(160deg, #fdf3f6 0%, #f4f8fc 55%, #f6f4fc 100%);
+  --dc-card-bg: #ffffff;
+  --dc-text-main: #3f4653; // slate suave (não preto puro)
+  --dc-text-secondary: #5b6270;
+  --dc-text-muted: #7b8493;
+  --dc-text-on-dark: #ffffff;
+  --dc-border: #e7ecf3;
+
+  /* 📐 Escala (rem) */
+  --dc-radius: 1rem; // 16px
+  --dc-radius-sm: 0.625rem; // 10px
+  --dc-radius-pill: 62.5rem;
+  --dc-shadow-sm: 0 0.0625rem 0.1875rem rgba(63, 70, 83, 0.06);
+  --dc-shadow-md: 0 0.5rem 1.5rem rgba(63, 70, 83, 0.08);
+
+  /* Altura da barra inferior (mobile) para reservar espaço no conteúdo */
+  --dc-bottomnav-h: 4.25rem;
+
+  /* Container fluido: 100% da largura até um teto, com respiro lateral em % */
+  --dc-container-max: 75rem; // 1200px
+  --dc-gap: clamp(1rem, 3vw, 1.75rem);
+  --dc-pad-x: clamp(1rem, 5%, 2rem);
+}
+
+/* 🌙 Dark mode — ativado por [data-theme="dark"] no <html> (ThemeService) */
+[data-theme='dark'] {
+  --dc-primary: #e88aa8;
+  --dc-primary-strong: #f4b0c6;
+  --dc-primary-soft: #2c2027;
+  --dc-primary-border: #45303a;
+
+  --dc-secondary: #6fb8a4;
+  --dc-secondary-strong: #86dcc7;
+  --dc-secondary-soft: #17292a;
+  --dc-secondary-border: #244039;
+
+  --dc-accent: #a99be0;
+  --dc-accent-strong: #c3b4f2;
+  --dc-accent-soft: #221d33;
+
+  --dc-pink: #d98fb2;
+  --dc-pink-strong: #f2a9c8;
+  --dc-pink-soft: #2a1d25;
+
+  --dc-danger: #d98a8a;
+  --dc-danger-strong: #f0a3a3;
+  --dc-danger-soft: #2c1c1c;
+
+  --dc-warning-soft: #2c2618;
+  --dc-warning-strong: #f0c07a;
+
+  --dc-status-success: #7fd39a;
+  --dc-status-success-soft: #16281c;
+  --dc-status-warning: #f0c07a;
+  --dc-status-warning-soft: #2c2618;
+  --dc-status-danger: #f0a3a3;
+  --dc-status-danger-soft: #2c1c1c;
+  --dc-status-info: #9dbbe0;
+  --dc-status-info-soft: #172230;
+
+  --dc-period-morning-soft: #2e1e26;
+  --dc-period-morning-strong: #f3a6c0;
+  --dc-period-morning-border: #47303b;
+  --dc-period-afternoon-soft: #2e261a;
+  --dc-period-afternoon-strong: #f0c07a;
+  --dc-period-afternoon-border: #473a24;
+  --dc-period-evening-soft: #172a28;
+  --dc-period-evening-strong: #7fded0;
+  --dc-period-evening-border: #234039;
+  --dc-period-night-soft: #1e2036;
+  --dc-period-night-strong: #b9baf3;
+  --dc-period-night-border: #313457;
+  --dc-period-asneeded-soft: #1a2a1e;
+  --dc-period-asneeded-strong: #9ad9a8;
+  --dc-period-asneeded-border: #294031;
+
+  --dc-bg: #14161c;
+  --dc-bg-gradient: linear-gradient(160deg, #191420 0%, #14161c 55%, #141a1c 100%);
+  --dc-card-bg: #1e2028;
+  --dc-text-main: #e7e9ee;
+  --dc-text-secondary: #b0b6c2;
+  --dc-text-muted: #a1a7b3;
+  --dc-text-on-dark: #ffffff;
+  --dc-border: #2b2e38;
+
+  --dc-shadow-sm: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.35);
+  --dc-shadow-md: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.45);
+}
+
+// Container reutilizável (largura fluida + teto)
+.dc-container {
+  width: 100%;
+  max-width: var(--dc-container-max);
+  margin-inline: auto;
+  padding-inline: var(--dc-pad-x);
+}
+
+// ----------------------------------------------------------------------------
+// Botões — base mobile-first (largura total no mobile, auto em telas maiores)
+// ----------------------------------------------------------------------------
+.dc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border: 0.0625rem solid var(--dc-secondary-border);
+  border-radius: var(--dc-radius-sm);
+  background: var(--dc-secondary);
+  color: var(--dc-text-main);
+  cursor: pointer;
+  transition:
+    filter 0.2s ease,
+    transform 0.05s ease,
+    box-shadow 0.2s ease;
+  text-decoration: none;
+
+  &:hover {
+    filter: brightness(0.97);
+    color: var(--dc-text-main);
+  }
+  &:active {
+    transform: translateY(0.0625rem);
+  }
+  &:focus-visible {
+    outline: 0.1875rem solid var(--dc-primary-border);
+    outline-offset: 0.125rem;
+  }
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  @media (min-width: 30rem) {
+    width: auto;
+  }
+}
+
+.dc-btn--primary {
+  background: var(--dc-primary);
+  color: #fefefe;
+  border-color: var(--dc-primary-border);
+
+  &:hover {
+    filter: brightness(0.9) saturate(1.15);
+    color: #fefefe;
+  }
+}
+.dc-btn--outline {
+  background: transparent;
+  color: var(--dc-text-main);
+  border-color: var(--dc-border);
+  &:hover {
+    background: var(--dc-primary-soft);
+    filter: none;
+    color: var(--dc-text-main);
+  }
+}
+.dc-btn--danger {
+  background: var(--dc-danger);
+  color: var(--dc-danger-strong);
+  border-color: transparent;
+  width: auto;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+}
+// Botão compacto (ações em linha de tabela)
+.dc-btn--sm {
+  width: auto;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+}
+// Agrupa botões de ação numa linha da tabela
+.row-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+// ----------------------------------------------------------------------------
+// Cards + grades responsivas (grid auto-fit)
+// ----------------------------------------------------------------------------
+.dc-card {
+  background: var(--dc-card-bg);
+  border: 0.0625rem solid var(--dc-border);
+  border-radius: var(--dc-radius);
+  padding: clamp(1.15rem, 4%, 1.75rem);
+  box-shadow: var(--dc-shadow-sm);
+}
+
+.dc-grid-cards {
+  display: grid;
+  grid-template-columns: 1fr; // mobile: 1 coluna
+  gap: var(--dc-gap);
+  margin-bottom: 2rem;
+
+  // telas maiores: quantas colunas couberem, cada uma ≥ 16rem
+  @media (min-width: 30rem) {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Formulários
+// ----------------------------------------------------------------------------
+.dc-form-group {
+  margin-bottom: 1.25rem;
+}
+.dc-form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--dc-text-main);
+}
+.dc-input,
+.dc-select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: var(--dc-text-main);
+  background: var(--dc-card-bg);
+  border: 0.0625rem solid var(--dc-border);
+  border-radius: var(--dc-radius-sm);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: var(--dc-primary);
+    box-shadow: 0 0 0 0.1875rem var(--dc-primary-soft);
+  }
+}
+
+// Ações de formulário: empilhadas no mobile, lado a lado em telas maiores
+.dc-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (min-width: 30rem) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Tabelas (rolagem horizontal no mobile via wrapper .dc-table-scroll)
+// ----------------------------------------------------------------------------
+.dc-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.dc-table {
+  width: 100%;
+  min-width: 30rem; // garante leitura; wrapper rola no mobile
+  border-collapse: collapse;
+  background: var(--dc-card-bg);
+  border: 0.0625rem solid var(--dc-border);
+  border-radius: var(--dc-radius);
+  overflow: hidden;
+
+  th,
+  td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    font-size: 0.95rem;
+    border-bottom: 0.0625rem solid var(--dc-border);
+  }
+  th {
+    background: var(--dc-primary-soft);
+    font-weight: 600;
+    color: var(--dc-text-main);
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+.dc-table-empty {
+  text-align: center;
+  color: var(--dc-text-muted);
+}
+
+// ----------------------------------------------------------------------------
+// Badges e utilitários de texto
+// ----------------------------------------------------------------------------
+.dc-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--dc-radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--dc-secondary-soft);
+  color: var(--dc-secondary-strong);
+}
+
+.dc-error {
+  color: var(--dc-danger-strong);
+  background: var(--dc-danger-soft);
+  border: 0.0625rem solid var(--dc-danger);
+  border-radius: var(--dc-radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.dc-page-title {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  color: var(--dc-text-main);
+}
+.dc-subtitle {
+  color: var(--dc-text-muted);
+  margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  max-width: 60ch;
+}
+
+// Barra de ações acima de tabelas/listas
+.dc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+
+  @media (min-width: 30rem) {
+    justify-content: flex-end;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// 🕑 Bloco de período do dia — cartão com faixa colorida por período.
+// Use a classe base .dc-period + o modificador do período. As cores vêm dos
+// tokens --dc-period-*; a variável local --p-* é setada por modificador.
+// ----------------------------------------------------------------------------
+.dc-period {
+  --p-soft: var(--dc-period-morning-soft);
+  --p-strong: var(--dc-period-morning-strong);
+  --p-border: var(--dc-period-morning-border);
+
+  background: var(--dc-card-bg);
+  border: 0.0625rem solid var(--dc-border);
+  border-left: 0.375rem solid var(--p-strong);
+  border-radius: var(--dc-radius);
+  box-shadow: var(--dc-shadow-sm);
+  overflow: hidden;
+}
+.dc-period--morning {
+  --p-soft: var(--dc-period-morning-soft);
+  --p-strong: var(--dc-period-morning-strong);
+  --p-border: var(--dc-period-morning-border);
+}
+.dc-period--afternoon {
+  --p-soft: var(--dc-period-afternoon-soft);
+  --p-strong: var(--dc-period-afternoon-strong);
+  --p-border: var(--dc-period-afternoon-border);
+}
+.dc-period--evening {
+  --p-soft: var(--dc-period-evening-soft);
+  --p-strong: var(--dc-period-evening-strong);
+  --p-border: var(--dc-period-evening-border);
+}
+.dc-period--night {
+  --p-soft: var(--dc-period-night-soft);
+  --p-strong: var(--dc-period-night-strong);
+  --p-border: var(--dc-period-night-border);
+}
+.dc-period--asneeded {
+  --p-soft: var(--dc-period-asneeded-soft);
+  --p-strong: var(--dc-period-asneeded-strong);
+  --p-border: var(--dc-period-asneeded-border);
+}
+
+.dc-period__head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: var(--p-soft);
+  color: var(--p-strong);
+  font-family: 'Quicksand', system-ui, sans-serif;
+  font-weight: 700;
+}
+.dc-period__icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.15rem;
+  line-height: 1;
+  border-radius: var(--dc-radius-pill);
+  background: var(--dc-card-bg);
+}
+.dc-period__count {
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--dc-card-bg);
+  color: var(--p-strong);
+  border-radius: var(--dc-radius-pill);
+  padding: 0.1rem 0.6rem;
+}
+.dc-period__body {
+  padding: 0.5rem 1rem 1rem;
+}
+
+// Linha de dose dentro do bloco de período
+.dc-dose {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 0.0625rem solid var(--dc-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+.dc-dose__info {
+  min-width: 0;
+}
+.dc-dose__name {
+  font-weight: 700;
+}
+.dc-dose__meta {
+  font-size: 0.85rem;
+  color: var(--dc-text-muted);
+}
+.dc-dose__time {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--dc-text-muted);
+  white-space: nowrap;
+}
+
+// Pílula "✓ tomei" — alterna entre pendente e tomado
+.dc-take {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--dc-radius-pill);
+  border: 0.125rem solid var(--dc-status-success);
+  background: transparent;
+  color: var(--dc-status-success);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    transform 0.08s ease;
+
+  &:hover {
+    background: var(--dc-status-success-soft);
+  }
+  &:active {
+    transform: scale(0.96);
+  }
+  &:focus-visible {
+    outline: 0.1875rem solid var(--dc-status-success);
+    outline-offset: 0.125rem;
+  }
+
+  &.is-taken {
+    background: var(--dc-status-success);
+    color: var(--dc-text-on-dark);
+    animation: dc-pop 0.28s ease;
+  }
+}
+@keyframes dc-pop {
+  0% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dc-take.is-taken {
+    animation: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// 🚦 Selo de status (situação: normal / atenção / alterado / tomado…)
+// ----------------------------------------------------------------------------
+.dc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--dc-radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--dc-status-info-soft);
+  color: var(--dc-status-info);
+}
+.dc-status--success {
+  background: var(--dc-status-success-soft);
+  color: var(--dc-status-success);
+}
+.dc-status--warning {
+  background: var(--dc-status-warning-soft);
+  color: var(--dc-status-warning);
+}
+.dc-status--danger {
+  background: var(--dc-status-danger-soft);
+  color: var(--dc-status-danger);
+}
+
+// ----------------------------------------------------------------------------
+// Botão-ícone (ações compactas: editar, excluir, fechar)
+// ----------------------------------------------------------------------------
+.dc-iconbtn {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.05rem;
+  border-radius: var(--dc-radius-pill);
+  border: 0.0625rem solid var(--dc-border);
+  background: var(--dc-card-bg);
+  color: var(--dc-text-muted);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.08s ease;
+
+  &:hover {
+    color: var(--dc-primary-strong);
+    background: var(--dc-primary-soft);
+  }
+  &:active {
+    transform: scale(0.94);
+  }
+  &:focus-visible {
+    outline: 0.1875rem solid var(--dc-primary-border);
+    outline-offset: 0.125rem;
+  }
+
+  &--danger:hover {
+    color: var(--dc-status-danger);
+    background: var(--dc-status-danger-soft);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// FAB — botão flutuante "+" (novo item). Fica acima da barra inferior no mobile.
+// ----------------------------------------------------------------------------
+.dc-fab {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: calc(var(--dc-bottomnav-h) + 1rem);
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.6rem;
+  border: none;
+  border-radius: var(--dc-radius-pill);
+  background: var(--dc-primary);
+  color: var(--dc-text-on-dark);
+  box-shadow: var(--dc-shadow-md);
+  cursor: pointer;
+  transition:
+    filter 0.15s ease,
+    transform 0.08s ease;
+
+  &:hover {
+    filter: brightness(0.9) saturate(1.15);
+  }
+  &:active {
+    transform: scale(0.94);
+  }
+  &:focus-visible {
+    outline: 0.1875rem solid var(--dc-primary-border);
+    outline-offset: 0.1875rem;
+  }
+
+  @media (min-width: 48rem) {
+    bottom: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Bottom sheet — painel deslizante (mobile) / modal centralizado (desktop)
+// ----------------------------------------------------------------------------
+.dc-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(20, 22, 28, 0.45);
+  animation: dc-fade 0.18s ease;
+
+  @media (min-width: 48rem) {
+    align-items: center;
+  }
+}
+.dc-sheet {
+  width: 100%;
+  max-width: 34rem;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--dc-card-bg);
+  border-radius: var(--dc-radius) var(--dc-radius) 0 0;
+  padding: 0.75rem clamp(1rem, 5%, 1.75rem) calc(1.25rem + env(safe-area-inset-bottom, 0));
+  box-shadow: var(--dc-shadow-md);
+  animation: dc-slide-up 0.24s ease;
+
+  @media (min-width: 48rem) {
+    border-radius: var(--dc-radius);
+    margin-bottom: 0;
+    animation: dc-fade 0.18s ease;
+  }
+}
+.dc-sheet__grip {
+  width: 2.75rem;
+  height: 0.3rem;
+  border-radius: var(--dc-radius-pill);
+  background: var(--dc-border);
+  margin: 0.25rem auto 0.75rem;
+
+  @media (min-width: 48rem) {
+    display: none;
+  }
+}
+.dc-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0;
+  }
+}
+@keyframes dc-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes dc-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dc-sheet,
+  .dc-sheet-overlay {
+    animation: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Utilitários de página (métricas, seções, cartões de resumo, gráficos)
+// ----------------------------------------------------------------------------
+.metric {
+  font-size: clamp(1.6rem, 6vw, 1.9rem);
+  font-weight: 700;
+  font-family: 'Quicksand', system-ui, sans-serif;
+  margin: 0.35rem 0;
+  line-height: 1.1;
+
+  &--primary {
+    color: var(--dc-primary-strong);
+  }
+  &--secondary {
+    color: var(--dc-secondary-strong);
+  }
+  &--accent {
+    color: var(--dc-accent-strong);
+  }
+}
+.metric-desc {
+  font-size: 0.9rem;
+  color: var(--dc-text-muted);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(1.2rem, 4vw, 1.4rem);
+  margin: 0.5rem 0 1rem;
+  color: var(--dc-text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.02rem;
+  }
+  .metric {
+    margin-top: 0;
+  }
+  .dc-btn {
+    margin-top: auto;
+  }
+}
+
+.chart-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+}
+.chart-box {
+  position: relative;
+  width: 100%;
+  height: 16rem;
+  margin-top: 0.5rem;
+}
+.chart-empty {
+  color: var(--dc-text-muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+.empty-state {
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding-block: 2.25rem;
+
+  h3 {
+    margin-bottom: 0.25rem;
+  }
+  .dc-btn {
+    margin-top: 1rem;
+    width: auto;
+  }
+}
+.empty-state__emoji {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  color: var(--dc-primary-strong);
+}
+
+// Variação (delta) — sobe/desce
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--dc-text-muted);
+
+  &--up {
+    color: var(--dc-status-warning);
+  }
+  &--down {
+    color: var(--dc-status-success);
+  }
+}
+
+// Botão-link discreto (ações secundárias em cartões/sheets)
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  padding: 0.35rem 0;
+  //color: var(--dc-primary-strong);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+  &:focus-visible {
+    outline: 0.1875rem solid var(--dc-primary-border);
+    outline-offset: 0.125rem;
+  }
+}
+
+// Grade de campos em formulários (auto-fit)
+.fields-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 1rem;
+
+  @media (min-width: 30rem) {
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  }
+}
+
+// Conteúdo de leitura (Como usar / Sobre): largura confortável
+.dc-prose {
+  max-width: 44rem;
+
+  p {
+    color: var(--dc-text-secondary);
+    line-height: 1.7;
+  }
+}
+
+// Callout / nota (avisos, disclaimers)
+.dc-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--dc-radius);
+  background: var(--dc-status-info-soft);
+  color: var(--dc-status-info);
+  border: 0.0625rem solid var(--dc-border);
+
+  i {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+  p {
+    margin: 0;
+    color: inherit;
+    font-weight: 600;
+  }
+  &--warning {
+    background: var(--dc-status-warning-soft);
+    color: var(--dc-status-warning);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Acordeão (FAQ) — usa <details>/<summary> nativos (acessível, sem JS)
+// ----------------------------------------------------------------------------
+.dc-accordion {
+  max-width: 44rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.dc-accordion__item {
+  background: var(--dc-card-bg);
+  border: 0.0625rem solid var(--dc-border);
+  border-radius: var(--dc-radius);
+  box-shadow: var(--dc-shadow-sm);
+  overflow: hidden;
+}
+.dc-accordion__item > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 1.15rem;
+  font-family: 'Quicksand', system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--dc-text-main);
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+  &:focus-visible {
+    outline: 0.1875rem solid var(--dc-primary-border);
+    outline-offset: -0.1875rem;
+  }
+}
+.dc-accordion__chevron {
+  margin-left: auto;
+  color: var(--dc-text-muted);
+  transition: transform 0.2s ease;
+}
+.dc-accordion__item[open] .dc-accordion__chevron {
+  transform: rotate(180deg);
+}
+.dc-accordion__item > div {
+  padding: 0 1.15rem 1.1rem;
+  color: var(--dc-text-secondary);
+  line-height: 1.7;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dc-accordion__chevron {
+    transition: none;
+  }
+}
+
+// Passo numerado (Como usar)
+.dc-step__num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: var(--dc-radius-pill);
+  background: var(--dc-primary-soft);
+  color: var(--dc-primary-strong);
+  font-family: 'Quicksand', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}

@@ -1,0 +1,155 @@
+<h1 class="dc-page-title">Medidas</h1>
+<p class="dc-subtitle">Acompanhe a evolução do seu peso e das circunferências.</p>
+
+@if (error()) {
+  <p class="dc-error" role="alert">{{ error() }}</p>
+}
+
+<div class="dc-grid-cards">
+  <div class="dc-card summary-card">
+    <h3><i class="ti ti-scale" aria-hidden="true"></i> Peso atual</h3>
+    <p class="metric metric--secondary">{{ last() ? (last()!.weightKg.toFixed(1) + ' kg') : '-- kg' }}</p>
+    @if (delta(); as d) {
+      <p class="delta" [class.delta--up]="d > 0" [class.delta--down]="d < 0">
+        <i class="ti" [class.ti-trending-up]="d > 0" [class.ti-trending-down]="d < 0" aria-hidden="true"></i>
+        {{ d > 0 ? '+' : '' }}{{ d }} kg desde a última
+      </p>
+    } @else if (last()) {
+      <p class="metric-desc">Em {{ formatDate(last()!.date) }}</p>
+    } @else {
+      <p class="metric-desc">Nenhum registro ainda</p>
+    }
+  </div>
+
+  <div class="dc-card summary-card">
+    <h3><i class="ti ti-target" aria-hidden="true"></i> Meta</h3>
+    @if (editingGoal()) {
+      <div class="goal-edit">
+        <input class="dc-input" type="number" step="0.1" [(ngModel)]="goalInput" placeholder="kg" aria-label="Peso meta" />
+        <button class="dc-btn dc-btn--primary dc-btn--sm" (click)="saveGoal()">Salvar</button>
+      </div>
+      <button class="link-btn" (click)="clearGoal()">Remover meta</button>
+    } @else if (goal() != null) {
+      <p class="metric metric--primary">{{ goal()!.toFixed(1) }} kg</p>
+      @if (toGoal(); as t) {
+        <p class="metric-desc">
+          @if (t > 0) { Faltam {{ t }} kg } @else { {{ -t }} kg abaixo da meta 🎯 }
+        </p>
+      }
+      <button class="link-btn" (click)="startEditGoal()">Alterar meta</button>
+    } @else {
+      <p class="metric-desc">Defina um peso alvo para ver no gráfico.</p>
+      <button class="dc-btn dc-btn--outline dc-btn--sm" (click)="startEditGoal()">Definir meta</button>
+    }
+  </div>
+
+  <div class="dc-card summary-card">
+    <h3><i class="ti ti-ruler-2" aria-hidden="true"></i> RCQ</h3>
+    <p class="metric metric--accent">{{ last() ? rcq(last()!) : '—' }}</p>
+    <p class="metric-desc">Cintura/quadril · risco: ♀ > 0,85 · ♂ > 0,90</p>
+  </div>
+</div>
+
+<div class="dc-card chart-card">
+  <h3>Evolução do peso</h3>
+  @if (records().length === 0) {
+    <p class="chart-empty">Registre seu peso para ver a evolução aqui.</p>
+  } @else {
+    <div class="chart-box"><canvas #weightCanvas></canvas></div>
+  }
+</div>
+
+<h2 class="section-title">Histórico</h2>
+@if (loading()) {
+  <p class="chart-empty">Carregando…</p>
+} @else if (records().length === 0) {
+  <p class="chart-empty">Nenhuma medida registrada.</p>
+} @else {
+  <div class="dc-table-scroll">
+    <table class="dc-table">
+      <thead>
+        <tr>
+          <th>Data</th><th>Peso</th><th>Cintura</th><th>Quadril</th><th>% Gord.</th><th>RCQ</th><th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (rec of records(); track rec.id) {
+          <tr>
+            <td>{{ formatDate(rec.date) }}</td>
+            <td><strong>{{ rec.weightKg.toFixed(1) }}</strong></td>
+            <td>{{ rec.waist ? (rec.waist + ' cm') : '—' }}</td>
+            <td>{{ rec.hip ? (rec.hip + ' cm') : '—' }}</td>
+            <td>{{ rec.bodyFatPct ? (rec.bodyFatPct + '%') : '—' }}</td>
+            <td>{{ rcq(rec) }}</td>
+            <td>
+              <div class="dc-dose__actions">
+                <button type="button" class="dc-iconbtn" (click)="edit(rec)"
+                        [attr.aria-label]="'Editar medida de ' + formatDate(rec.date)"><i class="ti ti-pencil" aria-hidden="true"></i></button>
+                <button type="button" class="dc-iconbtn dc-iconbtn--danger" (click)="remove(rec)"
+                        [attr.aria-label]="'Excluir medida de ' + formatDate(rec.date)"><i class="ti ti-trash" aria-hidden="true"></i></button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<!-- Botão flutuante -->
+<button type="button" class="dc-fab" (click)="openForm()" aria-label="Registrar medida">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+</button>
+
+<!-- Bottom sheet de registro -->
+@if (showForm()) {
+  <div class="dc-sheet-overlay" (click)="cancel()">
+    <div class="dc-sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+         [attr.aria-label]="editingId() ? 'Editar medida' : 'Registrar medida'">
+      <div class="dc-sheet__grip" aria-hidden="true"></div>
+      <header class="dc-sheet__head">
+        <h3>{{ editingId() ? 'Editar medida' : 'Registrar medida' }}</h3>
+        <button type="button" class="dc-iconbtn" (click)="cancel()" aria-label="Fechar"><i class="ti ti-x" aria-hidden="true"></i></button>
+      </header>
+
+      <div class="dc-form-group">
+        <label for="m-date">Data</label>
+        <input id="m-date" class="dc-input" type="date" [(ngModel)]="date" />
+      </div>
+
+      <div class="fields-grid">
+        @for (f of primaryFields; track f.key) {
+          <div class="dc-form-group">
+            <label [for]="'m-' + f.key">{{ f.label }} ({{ f.unit }})</label>
+            <input [id]="'m-' + f.key" class="dc-input" type="number" step="0.1"
+                   [(ngModel)]="values[f.key]"
+                   [placeholder]="f.key === 'weightKg' ? 'obrigatório' : 'opcional'" />
+          </div>
+        }
+      </div>
+
+      @if (showMore()) {
+        <div class="fields-grid">
+          @for (f of moreFields; track f.key) {
+            <div class="dc-form-group">
+              <label [for]="'m-' + f.key">{{ f.label }} ({{ f.unit }})</label>
+              <input [id]="'m-' + f.key" class="dc-input" type="number" step="0.1"
+                     [(ngModel)]="values[f.key]" placeholder="opcional" />
+            </div>
+          }
+        </div>
+      } @else {
+        <button type="button" class="link-btn" (click)="showMore.set(true)">
+          <i class="ti ti-plus" aria-hidden="true"></i> Mais medidas
+        </button>
+      }
+
+      <div class="dc-form-actions">
+        <button class="dc-btn dc-btn--outline" (click)="cancel()">Cancelar</button>
+        <button class="dc-btn dc-btn--primary" (click)="save()" [disabled]="saving()">
+          {{ saving() ? 'Salvando…' : 'Salvar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

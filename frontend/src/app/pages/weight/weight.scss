@@ -1,0 +1,15 @@
+// Estilos específicos da página de Medidas.
+// Métricas, cartões de resumo, gráfico e grade de campos vêm do design system.
+
+.chart-card { margin-bottom: 1.5rem; }
+
+// Edição da meta de peso (linha input + salvar)
+.goal-edit {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.35rem 0 0.25rem;
+
+  .dc-input { max-width: 7rem; }
+  .dc-btn { width: auto; }
+}

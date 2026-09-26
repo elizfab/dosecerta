@@ -1,0 +1,113 @@
+<h1 class="dc-page-title">Exames</h1>
+<p class="dc-subtitle">Seus resultados em linha do tempo, com a situação frente à referência.</p>
+
+@if (error()) {
+  <p class="dc-error" role="alert">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <p class="chart-empty">Carregando…</p>
+} @else if (exams().length === 0) {
+  <section class="dc-card empty-state">
+    <span class="empty-state__emoji" aria-hidden="true"><i class="ti ti-test-pipe"></i></span>
+    <h3>Nenhum exame registrado</h3>
+    <p class="metric-desc">Guarde seus resultados para acompanhar a evolução ao longo do tempo.</p>
+    <button type="button" class="dc-btn dc-btn--primary" (click)="openForm()">
+      <i class="ti ti-plus" aria-hidden="true"></i> Novo exame
+    </button>
+  </section>
+} @else {
+  <ol class="timeline">
+    @for (exam of exams(); track exam.id) {
+      <li class="timeline__item">
+        <span class="timeline__dot" [class]="statusVariant(exam)" aria-hidden="true">
+          <i class="ti {{ statusIcon(exam) }}"></i>
+        </span>
+        <div class="dc-card timeline__card">
+          <div class="timeline__top">
+            <div>
+              <div class="timeline__name">{{ exam.name }}</div>
+              <div class="timeline__date">{{ formatDate(exam.date) }}</div>
+            </div>
+            <span class="dc-status" [class]="statusVariant(exam)">
+              <i class="ti {{ statusIcon(exam) }}" aria-hidden="true"></i> {{ statusLabel(exam) }}
+            </span>
+          </div>
+
+          <div class="timeline__result">
+            <span class="timeline__value">{{ exam.value != null ? exam.value : '—' }} {{ exam.unit }}</span>
+            <span class="timeline__ref">referência: {{ reference(exam) }} {{ exam.unit }}</span>
+          </div>
+
+          @if (exam.notes) {
+            <p class="timeline__notes">{{ exam.notes }}</p>
+          }
+
+          <div class="timeline__actions">
+            <button type="button" class="dc-iconbtn" (click)="edit(exam)"
+                    [attr.aria-label]="'Editar ' + exam.name"><i class="ti ti-pencil" aria-hidden="true"></i></button>
+            <button type="button" class="dc-iconbtn dc-iconbtn--danger" (click)="remove(exam)"
+                    [attr.aria-label]="'Excluir ' + exam.name"><i class="ti ti-trash" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </li>
+    }
+  </ol>
+}
+
+<!-- Botão flutuante -->
+<button type="button" class="dc-fab" (click)="openForm()" aria-label="Novo exame">
+  <i class="ti ti-plus" aria-hidden="true"></i>
+</button>
+
+<!-- Bottom sheet de cadastro/edição -->
+@if (showForm()) {
+  <div class="dc-sheet-overlay" (click)="cancel()">
+    <div class="dc-sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+         [attr.aria-label]="editingId() ? 'Editar exame' : 'Novo exame'">
+      <div class="dc-sheet__grip" aria-hidden="true"></div>
+      <header class="dc-sheet__head">
+        <h3>{{ editingId() ? 'Editar exame' : 'Novo exame' }}</h3>
+        <button type="button" class="dc-iconbtn" (click)="cancel()" aria-label="Fechar"><i class="ti ti-x" aria-hidden="true"></i></button>
+      </header>
+
+      <div class="fields-grid">
+        <div class="dc-form-group">
+          <label for="e-name">Nome do exame</label>
+          <input id="e-name" class="dc-input" type="text" [(ngModel)]="form.name" placeholder="Glicose" autocomplete="off" />
+        </div>
+        <div class="dc-form-group">
+          <label for="e-date">Data</label>
+          <input id="e-date" class="dc-input" type="date" [(ngModel)]="form.date" />
+        </div>
+        <div class="dc-form-group">
+          <label for="e-value">Resultado</label>
+          <input id="e-value" class="dc-input" type="number" step="0.01" [(ngModel)]="form.value" placeholder="90" />
+        </div>
+        <div class="dc-form-group">
+          <label for="e-unit">Unidade</label>
+          <input id="e-unit" class="dc-input" type="text" [(ngModel)]="form.unit" placeholder="mg/dL" autocomplete="off" />
+        </div>
+        <div class="dc-form-group">
+          <label for="e-min">Referência mín.</label>
+          <input id="e-min" class="dc-input" type="number" step="0.01" [(ngModel)]="form.referenceMin" placeholder="opcional" />
+        </div>
+        <div class="dc-form-group">
+          <label for="e-max">Referência máx.</label>
+          <input id="e-max" class="dc-input" type="number" step="0.01" [(ngModel)]="form.referenceMax" placeholder="opcional" />
+        </div>
+      </div>
+      <div class="dc-form-group">
+        <label for="e-notes">Observação <span class="opt">(opcional)</span></label>
+        <input id="e-notes" class="dc-input" type="text" [(ngModel)]="form.notes" placeholder="Em jejum" autocomplete="off" />
+      </div>
+
+      <div class="dc-form-actions">
+        <button class="dc-btn dc-btn--outline" (click)="cancel()">Cancelar</button>
+        <button class="dc-btn dc-btn--primary" (click)="save()" [disabled]="saving()">
+          {{ saving() ? 'Salvando…' : 'Salvar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

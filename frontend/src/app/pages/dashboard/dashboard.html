@@ -1,0 +1,138 @@
+<header class="dash-head">
+  <div>
+    <h1 class="dc-page-title">Hoje</h1>
+    <p class="dc-subtitle">Suas doses do dia, organizadas por período.</p>
+  </div>
+</header>
+
+<!-- Resumo do dia -->
+@if (activeMedsCount() > 0) {
+  <section class="today-summary" [class.is-done]="allDone()">
+    @if (allDone()) {
+      <span class="today-summary__emoji today-summary__emoji--done" aria-hidden="true"><i class="ti ti-circle-check"></i></span>
+      <p class="today-summary__text">Tudo em dia! Você tomou todas as doses de hoje.</p>
+    } @else {
+      <span class="today-summary__emoji" aria-hidden="true"><i class="ti ti-pill"></i></span>
+      <p class="today-summary__text">
+        <strong>{{ takenCount() }}</strong> de <strong>{{ activeMedsCount() }}</strong> doses tomadas ·
+        {{ pendingCount() }} pendente{{ pendingCount() === 1 ? '' : 's' }}
+      </p>
+    }
+    <div class="today-summary__bar" role="progressbar"
+         [attr.aria-valuenow]="takenCount()" [attr.aria-valuemin]="0" [attr.aria-valuemax]="activeMedsCount()">
+      <span [style.width.%]="activeMedsCount() ? (takenCount() / activeMedsCount()) * 100 : 0"></span>
+    </div>
+  </section>
+}
+
+<!-- Doses por período -->
+@if (periodGroups().length > 0) {
+  <section class="periods">
+    @for (group of periodGroups(); track group.key) {
+      <article [class]="'dc-period ' + group.className">
+        <header class="dc-period__head">
+          <span class="dc-period__icon" aria-hidden="true"><i class="ti {{ group.icon }}"></i></span>
+          {{ group.label }}
+          <span class="dc-period__count">{{ group.meds.length }}</span>
+        </header>
+        <div class="dc-period__body">
+          @for (med of group.meds; track med.id) {
+            <div class="dc-dose" [class.dc-dose--done]="isTaken(med.id)">
+              <div class="dc-dose__info">
+                <div class="dc-dose__name">{{ med.name }}</div>
+                <div class="dc-dose__meta">
+                  {{ med.dosage }}@if (med.notes) { · {{ med.notes }} }
+                </div>
+              </div>
+              <span class="dc-dose__time">{{ med.schedule }}</span>
+              <button
+                type="button"
+                class="dc-take"
+                [class.is-taken]="isTaken(med.id)"
+                (click)="toggleTaken(med.id)"
+                [attr.aria-pressed]="isTaken(med.id)"
+                [attr.aria-label]="isTaken(med.id) ? 'Desmarcar ' + med.name : 'Marcar ' + med.name + ' como tomado'"
+              >
+                {{ isTaken(med.id) ? '✓ tomado' : '✓ tomei' }}
+              </button>
+            </div>
+          }
+        </div>
+      </article>
+    }
+  </section>
+} @else {
+  <section class="dc-card empty-state">
+    <span class="empty-state__emoji" aria-hidden="true"><i class="ti ti-calendar"></i></span>
+    <h3>Nenhuma medicação ativa</h3>
+    <p class="metric-desc">Cadastre seus remédios para ver as doses de hoje aqui.</p>
+    <a class="dc-btn dc-btn--primary" routerLink="/medications">+ Cadastrar medicação</a>
+  </section>
+}
+
+<!-- Resumo rápido -->
+<h2 class="section-title">Resumo</h2>
+<div class="dc-grid-cards">
+  <div class="dc-card summary-card">
+    <h3><i class="ti ti-pill" aria-hidden="true"></i> Medicações ativas</h3>
+    <p class="metric metric--primary">{{ activeMedsCount() }}</p>
+    <a class="dc-btn dc-btn--primary" routerLink="/medications">Gerenciar</a>
+  </div>
+
+  <div class="dc-card summary-card">
+    <h3><i class="ti ti-scale" aria-hidden="true"></i> Último peso</h3>
+    <p class="metric metric--secondary">
+      {{ lastWeight() ? (lastWeight()!.weightKg.toFixed(1) + ' kg') : '-- kg' }}
+    </p>
+    <p class="metric-desc">
+      @if (lastWeight()) { Em {{ formatDate(lastWeight()!.date) }} } @else { Sem registros ainda }
+    </p>
+    <a class="dc-btn" routerLink="/weight">Ver medidas</a>
+  </div>
+
+  <div class="dc-card summary-card">
+    <h3><i class="ti ti-calculator" aria-hidden="true"></i> Calculadora de dose</h3>
+    <p class="metric-desc">Conversão de mg para mL / UI / gotas.</p>
+    <a class="dc-btn dc-btn--outline" routerLink="/calculator">Abrir calculadora</a>
+  </div>
+</div>
+
+<!-- Evolução -->
+<h2 class="section-title"><i class="ti ti-chart-line" aria-hidden="true"></i> Evolução</h2>
+<div class="charts-grid">
+  <div class="dc-card chart-card">
+    <h3>Peso</h3>
+    @if (weights().length === 0) {
+      <p class="chart-empty">Registre medidas para ver a evolução do peso.</p>
+    } @else {
+      <div class="chart-box"><canvas #weightCanvas></canvas></div>
+    }
+  </div>
+
+  <div class="dc-card chart-card">
+    <h3>Medidas (cintura, quadril, peito)</h3>
+    @if (weights().length === 0) {
+      <p class="chart-empty">Sem medidas registradas ainda.</p>
+    } @else {
+      <div class="chart-box"><canvas #measuresCanvas></canvas></div>
+    }
+  </div>
+
+  <div class="dc-card chart-card">
+    <div class="chart-head">
+      <h3>Exames</h3>
+      @if (examNames().length > 0) {
+        <select class="dc-select exam-select" (change)="onExamChange($event)">
+          @for (name of examNames(); track name) {
+            <option [value]="name" [selected]="name === selectedExam()">{{ name }}</option>
+          }
+        </select>
+      }
+    </div>
+    @if (exams().length === 0) {
+      <p class="chart-empty">Cadastre exames para ver a evolução dos resultados.</p>
+    } @else {
+      <div class="chart-box"><canvas #examCanvas></canvas></div>
+    }
+  </div>
+</div>

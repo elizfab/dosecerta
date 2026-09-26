@@ -1,0 +1,20 @@
+@if (!isHidden() && items().length) {
+  <nav class="nav" aria-label="Breadcrumb">
+    <ol class="list">
+      @for (item of items(); track item.label; let index = $index; let isLast = $last) {
+        <li class="item">
+          @if (index > 0) {
+            <i class="pi pi-chevron-right separatorIcon" aria-hidden="true"></i>
+          }
+          @if (item.href && !isLast) {
+            <a class="link" [routerLink]="item.href">{{ item.label }}</a>
+          } @else {
+            <span class="current" [attr.aria-current]="isLast ? 'page' : null">
+              {{ item.label }}
+            </span>
+          }
+        </li>
+      }
+    </ol>
+  </nav>
+}

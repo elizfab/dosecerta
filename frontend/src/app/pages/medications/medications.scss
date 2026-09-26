@@ -1,0 +1,43 @@
+// Estilos específicos da página de Medicamentos.
+// Componentes reutilizáveis (dc-iconbtn, dc-fab, dc-sheet) vivem no design system.
+
+.med-loading {
+  color: var(--dc-text-muted);
+  padding: 1rem 0;
+}
+
+.med-periods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--dc-gap);
+  margin-bottom: 2rem;
+
+  @media (min-width: 45rem) {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}
+
+// Ações (editar/excluir) na linha da dose
+.dc-dose__actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.dc-dose--paused {
+  .dc-dose__name { color: var(--dc-text-muted); }
+  .dc-dose__info { opacity: 0.75; }
+}
+
+// Prévia do período dentro do formulário
+.form-period-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--dc-primary-strong);
+}
+
+.opt { color: var(--dc-text-muted); font-weight: 400; }

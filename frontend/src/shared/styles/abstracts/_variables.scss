@@ -1,0 +1,206 @@
+// ============================================================================
+// Breakpoints for responsive design
+// ============================================================================
+
+@use 'sass:map';
+
+$breakpoints: (
+  'mobile': 20rem,      // 320px
+  'mobile-sm': 23.4375rem,  // 375px
+  'mobile-md': 26.5625rem,  // 425px
+  'tablet': 48rem,      // 768px
+  'desktop': 64rem,     // 1024px
+  'desktop-lg': 80rem,  // 1280px
+  'desktop-xl': 90rem,  // 1440px
+  'desktop-xxl': 120rem // 1920px
+);
+
+// Mixin for media queries
+@mixin media($breakpoint) {
+  @media (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// ============================================================================
+// CSS Custom Properties (Design System)
+// ============================================================================
+
+:root {
+  /* 📐 Layout */
+  --sidebar-width-expanded: 15rem;
+  --sidebar-width-collapsed: 4rem;
+  --header-height: 4rem;
+  --icon-size: 1.25rem;
+  --text-xs: 0.75rem;
+  --radius-md: 0.75rem;
+
+  /* 🎨 Nova base */
+  --color-bg: #f1f1f1;
+  --color-surface: #fbfaf8;
+  --color-border-subtle: #e2ded9;
+  --color-sidebar-bg-dark: #201f25;
+  --color-header-bg: #f3f1ee;
+  --color-footer-bg: #edeae6;
+
+  /* ✍️ Tipografia */
+  --color-text-primary: #4d4d47;
+  --color-text-secondary: #6b6a64;
+  --color-text-muted: #8a887f;
+  --color-text-on-dark: #ffffff;
+
+  /* 🌸 Ações */
+  --color-primary: #e59a9a;
+  --color-primary-hover: #d88787;
+  --color-primary-border: #d4a39a;
+  --color-primary-soft: #f3c6c6;
+  --color-accent: #f1c27d;
+
+  /* 📌 Ícones */
+  --color-icon-default: #6b6a64;
+  --color-icon-active: #e59a9a;
+  --color-icon-muted: #a5a39a;
+
+  /* 🚦 Status */
+  --color-status-success: #0f7a55;
+  --color-status-info: #355f8c;
+  --color-status-warning: #ffb84d;
+  --color-status-danger: #c23a3a;
+  --color-status-neutral: #555b6e;
+
+  --text: #fefefe;
+  --black: #000100;
+  --foreground: #0e0e11;
+  --color-amarelo: #ffb84d;
+  --color-amarelo-shadow: #ffcc70;
+  --color-rosa: #ea4c89;
+  --color-rose: #ff8899;
+  --color-rose-hover: #ff7086;
+  --color-roxo: #8f48eb;
+  --color-azul: #1da1f2;
+  --color-green-10: #ccffeb;
+  --color-green-50: #00ff88;
+
+  /* Sidebar width used by the main layout (updated at runtime) */
+  --sidebar-current-width: var(--sidebar-width-collapsed);
+
+  --layout-main-margin-left: calc(var(--sidebar-current-width) + 2rem);
+  --layout-main-margin-right: 2rem;
+
+  --container-width: 90rem;
+}
+
+
+// ============================================================================
+// Colors
+// ============================================================================
+
+$color-primary: #fefefe;
+$color-secondary: #6c757d;
+$color-success: #28a745;
+$color-danger: #dc3545;
+$color-warning: #ffc107;
+$color-info: #17a2b8;
+
+$color-gray-900: #1a1a1a;
+$color-gray-800: #2d2d2d;
+$color-gray-700: #404040;
+$color-gray-600: #595959;
+$color-gray-500: #808080;
+$color-gray-400: #b3b3b3;
+$color-gray-300: #d9d9d9;
+$color-gray-200: #e6e6e6;
+$color-gray-100: #f2f2f2;
+$color-white: #ffffff;
+
+// ============================================================================
+// Typography
+// ============================================================================
+
+// Corpo: fonte de leitura amigável e arredondada (alta legibilidade).
+// Títulos: Quicksand (arredondada, combina com o visual pastel).
+$font-family-base: "Nunito Sans", "Nunito", system-ui, -apple-system, sans-serif;
+$font-family-heading: "Quicksand", "Nunito", system-ui, sans-serif;
+$font-size-base: 1rem;
+$font-size-lg: 1.25rem;
+$font-size-sm: 0.875rem;
+$font-size-xs: 0.75rem;
+
+$line-height-base: 1.5;
+$line-height-lg: 1.75;
+$line-height-sm: 1.25;
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// ============================================================================
+// Spacing
+// ============================================================================
+
+$spacing-unit: 1rem;
+
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-xxl: 3rem;
+$spacing-xxxl: 4rem;
+
+// ============================================================================
+// Border Radius
+// ============================================================================
+
+$border-radius-xs: 0.25rem;
+$border-radius-sm: 0.5rem;
+$border-radius-md: 1rem;
+$border-radius-lg: 1.5rem;
+$border-radius-full: 9999rem;
+
+// ============================================================================
+// Shadows
+// ============================================================================
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+// ============================================================================
+// Transitions
+// ============================================================================
+
+$transition-base: all 0.3s ease-in-out;
+$transition-fast: all 0.15s ease-in-out;
+$transition-slow: all 0.6s ease-in-out;
+
+// ============================================================================
+// Dark mode fallback para as variáveis --color-* legadas
+// ============================================================================
+
+[data-theme='dark'] {
+  --color-bg: #14161c;
+  --color-surface: #1e2028;
+  --color-border-subtle: #2b2e38;
+  --color-sidebar-bg-dark: #0f1014;
+  --color-header-bg: #1a1c24;
+  --color-footer-bg: #1a1c24;
+
+  --color-text-primary: #e7e9ee;
+  --color-text-secondary: #a1a7b3;
+  --color-text-muted: #6c7280;
+  --color-text-on-dark: #ffffff;
+
+  --color-primary: #e88aa8;
+  --color-primary-hover: #f0a3bb;
+  --color-primary-border: #45303a;
+  --color-primary-soft: #2c2027;
+  --color-accent: #f1c27d;
+
+  --color-icon-default: #a1a7b3;
+  --color-icon-active: #e88aa8;
+  --color-icon-muted: #6c7280;
+}

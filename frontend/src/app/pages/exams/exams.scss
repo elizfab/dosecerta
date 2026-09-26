@@ -1,0 +1,81 @@
+// Estilos específicos da página de Exames (linha do tempo).
+// Selo de status (.dc-status*) e sheet/fab vêm do design system.
+
+.timeline {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0.25rem 0.85rem;
+  padding-bottom: 1rem;
+
+  // linha vertical conectando os pontos
+  &::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 2.75rem;
+    bottom: -0.25rem;
+    width: 0.125rem;
+    background: var(--dc-border);
+    transform: translateX(-50%);
+  }
+  &:last-child::before { display: none; }
+}
+
+.timeline__dot {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--dc-radius-pill);
+  display: grid;
+  place-items: center;
+  font-size: 1.05rem;
+  z-index: 1;
+  background: var(--dc-border);
+  color: var(--dc-text-muted);
+  border: 0.1875rem solid var(--dc-bg);
+}
+
+.timeline__card { padding: 0.9rem 1rem; }
+
+.timeline__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.timeline__name { font-weight: 700; font-size: 1.02rem; }
+.timeline__date { font-size: 0.82rem; color: var(--dc-text-muted); }
+
+.timeline__result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin-top: 0.6rem;
+}
+.timeline__value {
+  font-family: 'Quicksand', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--dc-text-main);
+}
+.timeline__ref { font-size: 0.82rem; color: var(--dc-text-muted); }
+
+.timeline__notes {
+  margin: 0.6rem 0 0;
+  font-size: 0.88rem;
+  color: var(--dc-text-muted);
+}
+
+.timeline__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}

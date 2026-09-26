@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'shared/styles/abstracts/variables' as vars;
+@use 'shared/styles/base/reset';
+@use 'shared/styles/base/typography';
+@use 'shared/styles/base/dosecerta';
+@import 'primeicons/primeicons.css';
+
+:root {
+  // Alinha qualquer componente PrimeNG à marca rosa (não mais o grafite antigo).
+  --p-primary-color: #b23a68;
+  --p-primary-contrast-color: #ffffff;
+
+  --p-button-primary-background: #b23a68;
+  --p-button-primary-hover-background: #9c3059;
+  --p-button-primary-active-background: #9c3059;
+  --p-button-primary-border-color: #b23a68;
+  --p-button-primary-hover-border-color: #9c3059;
+  --p-button-primary-active-border-color: #9c3059;
+  --p-button-primary-color: #ffffff;
+  --p-button-primary-hover-color: #ffffff;
+  --p-button-primary-active-color: #ffffff;
+
+  --p-inputtext-focus-border-color: #b23a68;
+  --p-focus-ring-color: rgba(178, 58, 104, 0.18);
+  --p-focus-ring-shadow: 0 0 0 0.15rem rgba(178, 58, 104, 0.18);
+}
+
+[data-theme='dark'] {
+  // Mantém o rosa como cor primária, mas ajusta contraste para o fundo escuro.
+  --p-primary-color: #e88aa8;
+  --p-primary-contrast-color: #14161c;
+
+  --p-button-primary-background: #e88aa8;
+  --p-button-primary-hover-background: #f0a3bb;
+  --p-button-primary-active-background: #f0a3bb;
+  --p-button-primary-border-color: #e88aa8;
+  --p-button-primary-hover-border-color: #f0a3bb;
+  --p-button-primary-active-border-color: #f0a3bb;
+  --p-button-primary-color: #14161c;
+  --p-button-primary-hover-color: #14161c;
+  --p-button-primary-active-color: #14161c;
+
+  --p-inputtext-focus-border-color: #e88aa8;
+  --p-focus-ring-color: rgba(232, 138, 168, 0.28);
+  --p-focus-ring-shadow: 0 0 0 0.15rem rgba(232, 138, 168, 0.28);
+}

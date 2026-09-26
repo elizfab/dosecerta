@@ -1,0 +1,64 @@
+<h1 class="dc-page-title">Calculadora de dosagem</h1>
+<p class="dc-subtitle">Converta a dose prescrita (mg) em mL, unidades (UI) ou gotas.</p>
+
+<div class="calc-safety" role="note">
+  <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+  <span>Esta calculadora é um apoio. Sempre confirme a dose com seu médico e a bula antes de usar.</span>
+</div>
+
+<div class="dc-card calc-card">
+  <div class="dc-form-group">
+    <label for="calc-conc">Concentração do frasco (mg por 1 mL)</label>
+    <input id="calc-conc" class="dc-input" type="number" step="0.1" inputmode="decimal"
+           [(ngModel)]="concentration" placeholder="10" />
+  </div>
+  <div class="dc-form-group">
+    <label for="calc-dose">Dose prescrita (mg)</label>
+    <input id="calc-dose" class="dc-input" type="number" step="0.1" inputmode="decimal"
+           [(ngModel)]="dose" placeholder="2.5" />
+  </div>
+  <div class="dc-form-group">
+    <label for="calc-device">Tipo de dispositivo</label>
+    <select id="calc-device" class="dc-select" [(ngModel)]="device">
+      <option value="ml">Seringa em mL (padrão)</option>
+      <option value="ui">Seringa de insulina / U-100 (unidades)</option>
+      <option value="gotas">Conta-gotas (1 mL = 20 gotas)</option>
+    </select>
+  </div>
+
+  <button class="dc-btn dc-btn--primary calc-submit" (click)="calculate()">
+    <i class="ti ti-calculator" aria-hidden="true"></i> Calcular dose
+  </button>
+
+  @if (error()) {
+    <p class="dc-error" role="alert">{{ error() }}</p>
+  }
+
+  @if (resultText()) {
+    <div class="calc-result" role="status">
+      <div class="calc-result__label"><i class="ti ti-check" aria-hidden="true"></i> Resultado</div>
+      <p class="calc-result__text">{{ resultText() }}</p>
+    </div>
+  }
+</div>
+
+@if (history().length > 0) {
+  <div class="calc-history">
+    <div class="calc-history__head">
+      <h2 class="section-title"><i class="ti ti-history" aria-hidden="true"></i> Histórico</h2>
+      <button type="button" class="link-btn" (click)="clearHistory()">Limpar</button>
+    </div>
+    <ul class="calc-history__list">
+      @for (h of history(); track h.when) {
+        <li class="dc-card calc-history__item">
+          <div class="calc-history__top">
+            <span class="dc-badge">{{ h.deviceLabel }}</span>
+            <span class="calc-history__when">{{ formatWhen(h.when) }}</span>
+          </div>
+          <p class="calc-history__calc">{{ h.dose }} mg ÷ {{ h.concentration }} mg/mL</p>
+          <p class="calc-history__text">{{ h.text }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+}

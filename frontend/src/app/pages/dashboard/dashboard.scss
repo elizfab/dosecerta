@@ -1,0 +1,139 @@
+.metric {
+  font-size: clamp(1.6rem, 6vw, 1.9rem);
+  font-weight: 700;
+  margin: 0.5rem 0;
+  line-height: 1.1;
+
+  &--primary { color: var(--dc-primary-strong); }
+  &--secondary { color: var(--dc-secondary-strong); }
+}
+
+.metric-desc {
+  font-size: 0.9rem;
+  color: var(--dc-text-muted);
+  margin-bottom: 1rem;
+}
+
+.dc-card {
+  display: flex;
+  flex-direction: column;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+  }
+
+  .dc-btn { margin-top: auto; }
+}
+
+.section-title {
+  font-size: clamp(1.2rem, 4vw, 1.4rem);
+  margin: 0.5rem 0 1rem;
+  color: var(--dc-text-main);
+}
+
+// Grade de gráficos: 1 coluna no mobile, colunas fluidas em telas maiores.
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--dc-gap);
+
+  @media (min-width: 45rem) {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}
+
+.chart-card h3 { margin-bottom: 0.5rem; }
+
+.chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.exam-select { width: auto; max-width: 60%; padding: 0.4rem 0.6rem; font-size: 0.85rem; }
+
+// Altura fixa em rem porque os gráficos usam maintainAspectRatio:false.
+.chart-box {
+  position: relative;
+  width: 100%;
+  height: 16rem;
+  margin-top: 0.5rem;
+}
+
+.chart-empty {
+  color: var(--dc-text-muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+// ---------------------------------------------------------------------------
+// "Hoje" — resumo do dia + doses por período
+// ---------------------------------------------------------------------------
+.dash-head { margin-bottom: 0.25rem; }
+
+.today-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5rem 0.85rem;
+  background: var(--dc-card-bg);
+  border: 0.0625rem solid var(--dc-border);
+  border-radius: var(--dc-radius);
+  box-shadow: var(--dc-shadow-sm);
+  padding: 1rem 1.15rem;
+  margin-bottom: 1.5rem;
+
+  &.is-done { border-color: var(--dc-secondary-border); background: var(--dc-status-success-soft); }
+}
+.today-summary__emoji { font-size: 1.6rem; line-height: 1; }
+.today-summary__text { margin: 0; font-size: 1rem; }
+.today-summary__bar {
+  grid-column: 1 / -1;
+  height: 0.5rem;
+  border-radius: var(--dc-radius-pill);
+  background: var(--dc-primary-soft);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--dc-primary);
+    transition: width 0.35s ease;
+  }
+}
+.is-done .today-summary__bar { background: color-mix(in srgb, var(--dc-status-success) 22%, transparent); }
+.is-done .today-summary__bar span { background: var(--dc-status-success); }
+
+.periods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--dc-gap);
+  margin-bottom: 2rem;
+
+  @media (min-width: 45rem) {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}
+
+.dc-dose--done {
+  .dc-dose__name { text-decoration: line-through; color: var(--dc-text-muted); }
+  .dc-dose__info { opacity: 0.7; }
+}
+
+.empty-state {
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  padding-block: 2.25rem;
+
+  .dc-btn { margin-top: 1rem; width: auto; }
+}
+.empty-state__emoji { font-size: 2.5rem; line-height: 1; margin-bottom: 0.5rem; }
+
+.summary-card .metric { margin-top: 0; }
