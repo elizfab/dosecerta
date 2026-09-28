@@ -258,6 +258,22 @@ const checkBackend = async () => {
   }
 };
 
+/**
+ * Redireciona as chamadas do app (APP_API) para API quando forem diferentes.
+ * Usa o domínio Fetch do CDP só com o padrão da API: o setRequestInterception do
+ * Puppeteer intercepta tudo e deixa fontes externas (Google Fonts) pendentes.
+ */
+const redirectApi = async (page) => {
+  if (API === APP_API) return;
+  const cdp = await page.createCDPSession();
+  await cdp.send('Fetch.enable', { patterns: [{ urlPattern: `${APP_API}/*` }] });
+  cdp.on('Fetch.requestPaused', ({ requestId, request }) => {
+    cdp
+      .send('Fetch.continueRequest', { requestId, url: API + request.url.slice(APP_API.length) })
+      .catch(() => {});
+  });
+};
+
 const main = async () => {
   const chrome = findChrome();
   if (!chrome) {
@@ -312,14 +328,7 @@ const main = async () => {
         const context = await browser.createBrowserContext();
         const page = await context.newPage();
         await page.setViewport({ width: viewport.width, height: viewport.height });
-        if (API !== APP_API) {
-          await page.setRequestInterception(true);
-          page.on('request', (req) => {
-            const url = req.url();
-            if (url.startsWith(APP_API)) req.continue({ url: API + url.slice(APP_API.length) });
-            else req.continue();
-          });
-        }
+        await redirectApi(page);
         await page.evaluateOnNewDocument(
           (key, value) => localStorage.setItem(key, value),
           THEME_KEY,
