@@ -1,4 +1,4 @@
-import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { BreadcrumbItem } from '../../types/breadcrumb.interface';
 import { filter, Subscription } from 'rxjs';
@@ -12,6 +12,9 @@ import { BreadcrumbService } from '../../../core/services/Breadcrumb/breadcrumb-
   styleUrl: './breadcrumbs.scss',
 })
 export class Breadcrumbs implements OnInit, OnDestroy {
+  private readonly router = inject(Router);
+  private readonly breadcrumbService = inject(BreadcrumbService);
+
   private readonly baseItems = signal<BreadcrumbItem[]>([]);
 
   readonly items = computed<BreadcrumbItem[]>(() => {
@@ -23,11 +26,6 @@ export class Breadcrumbs implements OnInit, OnDestroy {
   readonly isHidden = computed(() => this.breadcrumbService.hidden());
 
   private sub = new Subscription();
-
-  constructor(
-    private router: Router,
-    private breadcrumbService: BreadcrumbService,
-  ) {}
 
   ngOnInit(): void {
     this.build(this.router.url);

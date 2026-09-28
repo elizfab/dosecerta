@@ -67,8 +67,13 @@
 
 <!-- Bottom sheet de cadastro/edição -->
 @if (showForm()) {
-  <div class="dc-sheet-overlay" (click)="cancel()">
-    <div class="dc-sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+  <div
+    class="dc-sheet-overlay"
+    tabindex="-1"
+    (click)="$event.target === $event.currentTarget && cancel()"
+    (keydown.escape)="cancel()"
+  >
+    <div class="dc-sheet" role="dialog" aria-modal="true"
          [attr.aria-label]="editingId() ? 'Editar medicamento' : 'Novo medicamento'">
       <div class="dc-sheet__grip" aria-hidden="true"></div>
       <header class="dc-sheet__head">

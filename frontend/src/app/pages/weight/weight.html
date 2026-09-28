@@ -29,7 +29,7 @@
         <button class="dc-btn dc-btn--primary dc-btn--sm" (click)="saveGoal()">Salvar</button>
       </div>
       <button class="link-btn" (click)="clearGoal()">Remover meta</button>
-    } @else if (goal() != null) {
+    } @else if (goal() !== null) {
       <p class="metric metric--primary">{{ goal()!.toFixed(1) }} kg</p>
       @if (toGoal(); as t) {
         <p class="metric-desc">
@@ -103,8 +103,13 @@
 
 <!-- Bottom sheet de registro -->
 @if (showForm()) {
-  <div class="dc-sheet-overlay" (click)="cancel()">
-    <div class="dc-sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+  <div
+    class="dc-sheet-overlay"
+    tabindex="-1"
+    (click)="$event.target === $event.currentTarget && cancel()"
+    (keydown.escape)="cancel()"
+  >
+    <div class="dc-sheet" role="dialog" aria-modal="true"
          [attr.aria-label]="editingId() ? 'Editar medida' : 'Registrar medida'">
       <div class="dc-sheet__grip" aria-hidden="true"></div>
       <header class="dc-sheet__head">

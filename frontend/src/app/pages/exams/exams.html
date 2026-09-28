@@ -35,7 +35,7 @@
           </div>
 
           <div class="timeline__result">
-            <span class="timeline__value">{{ exam.value != null ? exam.value : '—' }} {{ exam.unit }}</span>
+            <span class="timeline__value">{{ exam.value !== undefined && exam.value !== null ? exam.value : '—' }} {{ exam.unit }}</span>
             <span class="timeline__ref">referência: {{ reference(exam) }} {{ exam.unit }}</span>
           </div>
 
@@ -62,8 +62,13 @@
 
 <!-- Bottom sheet de cadastro/edição -->
 @if (showForm()) {
-  <div class="dc-sheet-overlay" (click)="cancel()">
-    <div class="dc-sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true"
+  <div
+    class="dc-sheet-overlay"
+    tabindex="-1"
+    (click)="$event.target === $event.currentTarget && cancel()"
+    (keydown.escape)="cancel()"
+  >
+    <div class="dc-sheet" role="dialog" aria-modal="true"
          [attr.aria-label]="editingId() ? 'Editar exame' : 'Novo exame'">
       <div class="dc-sheet__grip" aria-hidden="true"></div>
       <header class="dc-sheet__head">
