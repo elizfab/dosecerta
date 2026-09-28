@@ -21,7 +21,7 @@ export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       console.error(`[API] ${req.method} ${req.url} → ${error.status}: ${message}`);
 
-      // Não exibe toast para o health-check (o MainLayout cuida do badge de status).
+      // Não exibe toast para o health-check (chamada técnica, sem ação da usuária).
       const isHealthCheck = req.url.endsWith('/health');
       if (!isHealthCheck) {
         notifications.show(message, 'error');

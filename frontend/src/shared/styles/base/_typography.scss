@@ -1,5 +1,4 @@
 @use '../abstracts/variables' as vars;
-@use 'sass:color';
 
 // ============================================================================
 // Google Fonts Import
@@ -25,46 +24,43 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: vars.$font-family-heading;
   font-weight: vars.$font-weight-bold;
-  line-height: vars.$line-height-lg;
+  line-height: 1.25;
   letter-spacing: -0.01em;
   margin-top: 0;
   margin-bottom: vars.$spacing-md;
   color: var(--dc-text-main);
 }
 
+// Escala mobile-first: cresce só a partir de tablet/desktop.
 h1 {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
 
   @include vars.media('tablet') {
-    font-size: 3rem;
+    font-size: 2.25rem;
   }
 
   @include vars.media('desktop') {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
   }
 }
 
 h2 {
-  font-size: 2rem;
-
-  @include vars.media('tablet') {
-    font-size: 2.5rem;
-  }
-
-  @include vars.media('desktop') {
-    font-size: 2.75rem;
-  }
-}
-
-h3 {
   font-size: 1.5rem;
 
   @include vars.media('tablet') {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
   }
 
   @include vars.media('desktop') {
     font-size: 2rem;
+  }
+}
+
+h3 {
+  font-size: 1.2rem;
+
+  @include vars.media('tablet') {
+    font-size: 1.35rem;
   }
 }
 
@@ -89,12 +85,13 @@ p {
 }
 
 a {
-  // color: vars.$color-primary;
+  color: var(--dc-link);
   text-decoration: none;
-  transition: vars.$transition-base;
+  transition: color 0.15s ease;
 
   &:hover {
-    color: color.adjust(vars.$color-primary, $lightness: -10%);
+    color: var(--dc-link-hover);
+    text-decoration: underline;
   }
 }
 
@@ -112,15 +109,15 @@ small {
 
 code {
   font-family: 'Courier New', monospace;
-  background-color: vars.$color-gray-100;
+  background-color: var(--dc-primary-soft);
   padding: vars.$spacing-xs vars.$spacing-sm;
-  border-radius: vars.$border-radius-sm;
+  border-radius: var(--dc-radius);
 }
 
 pre {
-  background-color: vars.$color-gray-100;
+  background-color: var(--dc-primary-soft);
   padding: vars.$spacing-md;
-  border-radius: vars.$border-radius-md;
+  border-radius: var(--dc-radius);
   overflow-x: auto;
 
   code {

@@ -68,10 +68,21 @@
   --dc-text-on-dark: #ffffff;
   --dc-border: #e7ecf3;
 
-  /* 📐 Escala (rem) */
-  --dc-radius: 1rem; // 16px
-  --dc-radius-sm: 0.625rem; // 10px
-  --dc-radius-pill: 62.5rem;
+  /* 🔗 Links e botões (contraste AA sobre o fundo) */
+  --dc-link: #b23a68;
+  --dc-link-hover: #8f2c52;
+  --dc-btn-primary-bg: #c2477a;
+  --dc-btn-primary-hover: #a83a67;
+  --dc-btn-primary-text: #ffffff;
+  --dc-btn-secondary-bg: #d6efe5;
+  --dc-btn-secondary-hover: #c2e6d8;
+  --dc-btn-secondary-text: #1d5c4e;
+  --dc-on-success: #ffffff;
+
+  /* 📐 Escala (rem) — cards e botões com cantos discretos */
+  --dc-radius: 0.2rem;
+  --dc-radius-sm: 0.2rem;
+  --dc-radius-pill: 62.5rem; // só para elementos decorativos (barras, pontos)
   --dc-shadow-sm: 0 0.0625rem 0.1875rem rgba(63, 70, 83, 0.06);
   --dc-shadow-md: 0 0.5rem 1.5rem rgba(63, 70, 83, 0.08);
 
@@ -140,10 +151,20 @@
   --dc-bg-gradient: linear-gradient(160deg, #191420 0%, #14161c 55%, #141a1c 100%);
   --dc-card-bg: #1e2028;
   --dc-text-main: #e7e9ee;
-  --dc-text-secondary: #b0b6c2;
-  --dc-text-muted: #a1a7b3;
+  --dc-text-secondary: #c3c8d2;
+  --dc-text-muted: #9aa1ae;
   --dc-text-on-dark: #ffffff;
   --dc-border: #2b2e38;
+
+  --dc-link: #f4b0c6;
+  --dc-link-hover: #fbd0de;
+  --dc-btn-primary-bg: #e88aa8;
+  --dc-btn-primary-hover: #f0a3bb;
+  --dc-btn-primary-text: #1f1219;
+  --dc-btn-secondary-bg: #1f3833;
+  --dc-btn-secondary-hover: #274741;
+  --dc-btn-secondary-text: #9fe5d3;
+  --dc-on-success: #10261a;
 
   --dc-shadow-sm: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.35);
   --dc-shadow-md: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.45);
@@ -170,20 +191,22 @@
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.2;
-  border: 0.0625rem solid var(--dc-secondary-border);
-  border-radius: var(--dc-radius-sm);
-  background: var(--dc-secondary);
-  color: var(--dc-text-main);
+  min-height: 2.75rem;
+  border: 0.0625rem solid transparent;
+  border-radius: var(--dc-radius);
+  background: var(--dc-btn-secondary-bg);
+  color: var(--dc-btn-secondary-text);
   cursor: pointer;
   transition:
-    filter 0.2s ease,
-    transform 0.05s ease,
-    box-shadow 0.2s ease;
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.05s ease;
   text-decoration: none;
 
   &:hover {
-    filter: brightness(0.97);
-    color: var(--dc-text-main);
+    background: var(--dc-btn-secondary-hover);
+    color: var(--dc-btn-secondary-text);
+    text-decoration: none;
   }
   &:active {
     transform: translateY(0.0625rem);
@@ -203,29 +226,32 @@
 }
 
 .dc-btn--primary {
-  background: var(--dc-primary);
-  color: #fefefe;
-  border-color: var(--dc-primary-border);
+  background: var(--dc-btn-primary-bg);
+  color: var(--dc-btn-primary-text);
 
   &:hover {
-    filter: brightness(0.9) saturate(1.15);
-    color: #fefefe;
+    background: var(--dc-btn-primary-hover);
+    color: var(--dc-btn-primary-text);
   }
 }
 .dc-btn--outline {
   background: transparent;
-  color: var(--dc-text-main);
-  border-color: var(--dc-border);
+  color: var(--dc-primary-strong);
+  border-color: var(--dc-primary-border);
   &:hover {
     background: var(--dc-primary-soft);
-    filter: none;
-    color: var(--dc-text-main);
+    color: var(--dc-primary-strong);
   }
 }
 .dc-btn--danger {
-  background: var(--dc-danger);
-  color: var(--dc-danger-strong);
-  border-color: transparent;
+  background: var(--dc-status-danger-soft);
+  color: var(--dc-status-danger);
+  border-color: var(--dc-danger);
+  &:hover {
+    background: var(--dc-status-danger-soft);
+    color: var(--dc-status-danger);
+    filter: brightness(0.96);
+  }
   width: auto;
   padding: 0.4rem 0.85rem;
   font-size: 0.85rem;
@@ -233,6 +259,7 @@
 // Botão compacto (ações em linha de tabela)
 .dc-btn--sm {
   width: auto;
+  min-height: 2.25rem;
   padding: 0.4rem 0.85rem;
   font-size: 0.85rem;
 }
@@ -355,7 +382,7 @@
 .dc-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  border-radius: var(--dc-radius-pill);
+  border-radius: var(--dc-radius);
   font-size: 0.8rem;
   font-weight: 600;
   background: var(--dc-secondary-soft);
@@ -467,7 +494,7 @@
   font-weight: 700;
   background: var(--dc-card-bg);
   color: var(--p-strong);
-  border-radius: var(--dc-radius-pill);
+  border-radius: var(--dc-radius);
   padding: 0.1rem 0.6rem;
 }
 .dc-period__body {
@@ -512,7 +539,7 @@
   gap: 0.3rem;
   min-height: 2.5rem;
   padding: 0.4rem 0.85rem;
-  border-radius: var(--dc-radius-pill);
+  border-radius: var(--dc-radius);
   border: 0.125rem solid var(--dc-status-success);
   background: transparent;
   color: var(--dc-status-success);
@@ -536,7 +563,7 @@
 
   &.is-taken {
     background: var(--dc-status-success);
-    color: var(--dc-text-on-dark);
+    color: var(--dc-on-success);
     animation: dc-pop 0.28s ease;
   }
 }
@@ -565,7 +592,7 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.2rem 0.7rem;
-  border-radius: var(--dc-radius-pill);
+  border-radius: var(--dc-radius);
   font-size: 0.78rem;
   font-weight: 700;
   background: var(--dc-status-info-soft);
@@ -593,7 +620,7 @@
   width: 2.5rem;
   height: 2.5rem;
   font-size: 1.05rem;
-  border-radius: var(--dc-radius-pill);
+  border-radius: var(--dc-radius);
   border: 0.0625rem solid var(--dc-border);
   background: var(--dc-card-bg);
   color: var(--dc-text-muted);
@@ -635,9 +662,9 @@
   height: 3.5rem;
   font-size: 1.6rem;
   border: none;
-  border-radius: var(--dc-radius-pill);
-  background: var(--dc-primary);
-  color: var(--dc-text-on-dark);
+  border-radius: 50%;
+  background: var(--dc-btn-primary-bg);
+  color: var(--dc-btn-primary-text);
   box-shadow: var(--dc-shadow-md);
   cursor: pointer;
   transition:
@@ -645,7 +672,7 @@
     transform 0.08s ease;
 
   &:hover {
-    filter: brightness(0.9) saturate(1.15);
+    background: var(--dc-btn-primary-hover);
   }
   &:active {
     transform: scale(0.94);
@@ -656,7 +683,7 @@
   }
 
   @media (min-width: 48rem) {
-    bottom: clamp(1.5rem, 4vw, 2.5rem);
+    bottom: clamp(4.5rem, 4vw, 2.5rem);
   }
 }
 
@@ -858,12 +885,13 @@
   background: none;
   border: none;
   padding: 0.35rem 0;
-  //color: var(--dc-primary-strong);
+  color: var(--dc-link);
   font-weight: 700;
   font-size: 0.85rem;
   cursor: pointer;
 
   &:hover {
+    color: var(--dc-link-hover);
     text-decoration: underline;
   }
   &:focus-visible {

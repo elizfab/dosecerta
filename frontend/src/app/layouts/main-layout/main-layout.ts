@@ -1,16 +1,15 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, DestroyRef, HostListener, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter } from 'rxjs';
 import { Footer } from '../../shared/components/footer/footer';
 import { ToastComponent } from '../../shared/components/toast/toast';
-import { HealthService } from '../../core/services/health/health-service';
 import { ThemeService } from '../../core/services/theme/theme-service';
-
-type BackendStatus = 'checking' | 'online' | 'offline';
 
 interface NavItem {
   path: string;
   label: string;
-  icon: string; // emoji amigável
+  icon: string; // classe do Tabler Icons
 }
 
 @Component({
@@ -20,11 +19,11 @@ interface NavItem {
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
 })
-export class MainLayout implements OnInit {
-  private readonly healthService = inject(HealthService);
+export class MainLayout {
   readonly themeService = inject(ThemeService);
 
-  readonly backendStatus = signal<BackendStatus>('checking');
+  // Menu dropdown do header (mobile/tablet).
+  readonly menuOpen = signal(false);
 
   // Abas principais — barra inferior no mobile / topo no desktop.
   readonly primaryNav: NavItem[] = [
@@ -35,17 +34,33 @@ export class MainLayout implements OnInit {
     { path: '/calculator', label: 'Calculadora', icon: 'ti-calculator' },
   ];
 
-  // Secundárias — só no topo (desktop) e no rodapé.
+  // Secundárias — no dropdown (mobile) e no topo (desktop).
   readonly secondaryNav: NavItem[] = [
     { path: '/how-to-use', label: 'Como Usar', icon: 'ti-info-circle' },
     { path: '/faq', label: 'FAQ', icon: 'ti-help-circle' },
     { path: '/about', label: 'Sobre', icon: 'ti-file-text' },
   ];
 
-  ngOnInit(): void {
-    this.healthService.check().subscribe({
-      next: () => this.backendStatus.set('online'),
-      error: () => this.backendStatus.set('offline'),
-    });
+  constructor() {
+    // Fecha o menu sempre que a navegação terminar.
+    inject(Router)
+      .events.pipe(
+        filter((e) => e instanceof NavigationEnd),
+        takeUntilDestroyed(inject(DestroyRef)),
+      )
+      .subscribe(() => this.menuOpen.set(false));
+  }
+
+  toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeMenu();
   }
 }

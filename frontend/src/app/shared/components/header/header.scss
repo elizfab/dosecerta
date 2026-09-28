@@ -9,7 +9,7 @@
 
 .container {
   width: 100%;
-  border-bottom: 1px solid var(--dc-border);
+  border-bottom: 0.0625rem solid var(--dc-border);
   margin-inline: auto;
   display: flex;
   padding: 1rem 0rem 0.3rem 0rem;
@@ -41,7 +41,7 @@
   gap: 1.8rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 75rem) {
   .container {
     /* width: 95%; */
     /* padding-inline: clamp(0.rem, 3vw, 1rem); */

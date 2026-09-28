@@ -1,12 +1,12 @@
 <div class="dc-shell">
-  <header class="dc-header">
+  <header class="dc-header" [class.is-open]="menuOpen()">
     <div class="dc-nav-container dc-container">
       <a class="dc-logo" routerLink="/dashboard" aria-label="DoseCerta — início">
         <img class="dc-logo__mark" src="/logo.png" alt="" aria-hidden="true" />
         <span class="dc-logo__text">DoseCerta <small>&amp; Saúde</small></span>
       </a>
 
-      <!-- Navegação no topo: só a partir de tablet -->
+      <!-- Navegação no topo: só no desktop -->
       <nav class="dc-topnav" aria-label="Navegação principal">
         <ul>
           @for (item of primaryNav; track item.path) {
@@ -30,44 +30,84 @@
         </ul>
       </nav>
 
-      <button
-        type="button"
-        class="dc-theme-toggle"
-        (click)="themeService.toggle()"
-        [attr.aria-label]="
-          themeService.theme() === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'
-        "
-        [attr.aria-pressed]="themeService.theme() === 'dark'"
-      >
-        <i
-          class="ti"
-          [class.ti-sun]="themeService.theme() === 'dark'"
-          [class.ti-moon]="themeService.theme() !== 'dark'"
-          aria-hidden="true"
-        ></i>
-      </button>
+      <div class="dc-header__actions">
+        <button
+          type="button"
+          class="dc-header-btn"
+          (click)="themeService.toggle()"
+          [attr.aria-label]="
+            themeService.theme() === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'
+          "
+          [attr.aria-pressed]="themeService.theme() === 'dark'"
+        >
+          <i
+            class="ti"
+            [class.ti-sun]="themeService.theme() === 'dark'"
+            [class.ti-moon]="themeService.theme() !== 'dark'"
+            aria-hidden="true"
+          ></i>
+        </button>
+
+        <!-- Botão do menu: só no mobile/tablet -->
+        <button
+          type="button"
+          class="dc-header-btn dc-menu-toggle"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="menuOpen()"
+          aria-controls="dc-mobile-menu"
+          [attr.aria-label]="menuOpen() ? 'Fechar menu' : 'Abrir menu'"
+        >
+          <i
+            class="ti"
+            [class.ti-x]="menuOpen()"
+            [class.ti-menu-2]="!menuOpen()"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </div>
     </div>
+
+    <!-- Dropdown do menu (mobile/tablet) -->
+    @if (menuOpen()) {
+      <nav id="dc-mobile-menu" class="dc-dropdown" aria-label="Menu">
+        <ul class="dc-dropdown__list dc-container">
+          @for (item of primaryNav; track item.path) {
+            <li>
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="active"
+                class="dc-dropdown__link"
+                (click)="closeMenu()"
+              >
+                <i class="ti {{ item.icon }}" aria-hidden="true"></i>
+                {{ item.label }}
+              </a>
+            </li>
+          }
+          <li class="dc-dropdown__divider" role="separator"></li>
+          @for (item of secondaryNav; track item.path) {
+            <li>
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="active"
+                class="dc-dropdown__link dc-dropdown__link--muted"
+                (click)="closeMenu()"
+              >
+                <i class="ti {{ item.icon }}" aria-hidden="true"></i>
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
+    }
   </header>
 
-  <main class="dc-main dc-container">
-    <div
-      class="dc-backend-status"
-      [class.online]="backendStatus() === 'online'"
-      [class.offline]="backendStatus() === 'offline'"
-    >
-      @switch (backendStatus()) {
-        @case ('checking') {
-          <span>Conectando ao backend…</span>
-        }
-        @case ('online') {
-          <span>● Backend conectado</span>
-        }
-        @case ('offline') {
-          <span>● Backend indisponível</span>
-        }
-      }
-    </div>
+  @if (menuOpen()) {
+    <div class="dc-dropdown-backdrop" (click)="closeMenu()" aria-hidden="true"></div>
+  }
 
+  <main class="dc-main dc-container">
     <router-outlet></router-outlet>
   </main>
 

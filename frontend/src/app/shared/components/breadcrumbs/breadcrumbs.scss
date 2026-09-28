@@ -35,7 +35,7 @@
   display: inline-flex;
   align-items: center;
   padding: 0.1rem 0.2rem;
-  border-radius: 0.35rem;
+  border-radius: var(--dc-radius);
 
   &:hover {
     color: var(--dc-primary-strong);
@@ -43,8 +43,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--dc-primary);
-    outline-offset: 2px;
+    outline: 0.125rem solid var(--dc-primary);
+    outline-offset: 0.125rem;
   }
 }
 

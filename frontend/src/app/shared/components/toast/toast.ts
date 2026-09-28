@@ -34,14 +34,14 @@ import { NotificationService } from '../../../core/services/notification/notific
   styles: [`
     .dc-toast-container {
       position: fixed;
-      bottom: calc(var(--dc-bottomnav-h, 64px) + 1rem);
+      bottom: calc(var(--dc-bottomnav-h, 4.25rem) + 1rem);
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       z-index: 9000;
-      width: min(90vw, 400px);
+      width: min(92%, 25rem);
       pointer-events: none;
     }
 
@@ -51,14 +51,14 @@ import { NotificationService } from '../../../core/services/notification/notific
       justify-content: space-between;
       gap: 0.75rem;
       padding: 0.75rem 1rem;
-      border-radius: var(--dc-radius, 12px);
+      border-radius: var(--dc-radius, 0.2rem);
       font-size: 0.875rem;
       font-weight: 500;
       pointer-events: all;
       box-shadow: var(--dc-shadow-md);
       background: var(--dc-card-bg);
       color: var(--dc-text-main);
-      border-left: 4px solid var(--dc-primary);
+      border-left: 0.25rem solid var(--dc-primary);
       animation: toast-in 0.2s ease;
     }
 
@@ -80,7 +80,7 @@ import { NotificationService } from '../../../core/services/notification/notific
     .dc-toast__close:hover { opacity: 1; }
 
     @keyframes toast-in {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(0.5rem); }
       to   { opacity: 1; transform: translateY(0); }
     }
   `],
